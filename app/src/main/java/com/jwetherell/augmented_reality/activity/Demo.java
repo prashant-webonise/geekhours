@@ -10,20 +10,33 @@ import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.Layout;
+import android.util.LayoutDirection;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.Adapter;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jwetherell.augmented_reality.R;
 import com.jwetherell.augmented_reality.data.ARData;
+import com.jwetherell.augmented_reality.data.CustomPlacesDataSource;
 import com.jwetherell.augmented_reality.data.GooglePlacesDataSource;
 import com.jwetherell.augmented_reality.data.LocalDataSource;
 import com.jwetherell.augmented_reality.data.NetworkDataSource;
@@ -34,15 +47,15 @@ import com.jwetherell.augmented_reality.widget.VerticalTextView;
 /**
  * This class extends the AugmentedReality and is designed to be an example on
  * how to extends the AugmentedReality class to show multiple data sources.
- * 
+ *
  * @author Justin Wetherell <phishman3579@gmail.com>
  */
 public class Demo extends AugmentedReality {
-	
-    private static final String TAG = "Demo";
-    private static final String locale = Locale.getDefault().getLanguage();
-    private static final BlockingQueue<Runnable> queue = new ArrayBlockingQueue<Runnable>(1);
-    private static final ThreadPoolExecutor exeService = new ThreadPoolExecutor(1, 1, 20, TimeUnit.SECONDS, queue);
+
+    private static String TAG = "Demo";
+    private static String locale = Locale.getDefault().getLanguage();
+    private static BlockingQueue<Runnable> queue = new ArrayBlockingQueue<Runnable>(1);
+    private static ThreadPoolExecutor exeService = new ThreadPoolExecutor(1, 1, 20, TimeUnit.SECONDS, queue);
     private static final Map<String, NetworkDataSource> sources = new ConcurrentHashMap<String, NetworkDataSource>();
 
     private static Toast myToast = null;
@@ -75,8 +88,39 @@ public class Demo extends AugmentedReality {
 
 //        NetworkDataSource wikipedia = new WikipediaDataSource(this.getResources());
 //        sources.put("wiki", wikipedia);
-        NetworkDataSource googlePlaces = new GooglePlacesDataSource(this.getResources());
+        NetworkDataSource googlePlaces = new CustomPlacesDataSource(this.getResources());
         sources.put("googlePlaces", googlePlaces);
+
+
+        prepareUI();
+
+    }
+
+    private void prepareUI() {
+        View view = LayoutInflater.from(this).inflate(R.layout.filter_spinner, null);
+        addContentView(view, new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+
+        Spinner spinnerFilters = (Spinner) view.findViewById(R.id.spinnerFilters);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, GooglePlacesDataSource.filters);
+        spinnerFilters.setAdapter(adapter);
+
+        spinnerFilters.setOnItemSelectedListener((new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                CustomPlacesDataSource googlePlaces = new CustomPlacesDataSource(Demo.this.getResources(), ((TextView) view).getText().toString());
+                reFresh();
+
+                sources.put("googlePlaces", googlePlaces);
+                Location last = ARData.getCurrentLocation();
+                updateData(last.getLatitude(), last.getLongitude(), last.getAltitude());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        }));
+
     }
 
     /**
@@ -138,8 +182,9 @@ public class Demo extends AugmentedReality {
      */
     @Override
     protected void markerTouched(Marker marker) {
-        text.setText(marker.getName());
-        myToast.show();
+        String uri = String.format(Locale.ENGLISH, "geo:%f,%f", marker.getPhysicalLocation().getLatitude(), marker.getPhysicalLocation().getLongitude());
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+        startActivity(intent);
     }
 
     /**
@@ -174,6 +219,7 @@ public class Demo extends AugmentedReality {
         String url = null;
         try {
             url = source.createRequestURL(lat, lon, alt, ARData.getRadius(), locale);
+            Log.e("URL####" ,""  + url);
         } catch (NullPointerException e) {
             return false;
         }
@@ -187,5 +233,12 @@ public class Demo extends AugmentedReality {
 
         ARData.addMarkers(markers);
         return true;
+    }
+
+    public void reFresh() {
+        updateDataOnZoom();
+        ARData.clearAll();
+        sources.clear();
+        camScreen.invalidate();
     }
 }

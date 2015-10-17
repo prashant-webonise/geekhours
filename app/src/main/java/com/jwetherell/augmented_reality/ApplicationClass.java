@@ -16,10 +16,21 @@ public class ApplicationClass extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        DisplayImageOptions options = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.drawable.buzz)
+                .showImageForEmptyUri(R.drawable.buzz)
+                .showImageOnFail(R.drawable.buzz)
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .considerExifParams(true)
+                .build();
+        
+        
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
                 .threadPriority(Thread.MIN_PRIORITY + 2)
                 .diskCacheFileNameGenerator(new Md5FileNameGenerator())
-                .defaultDisplayImageOptions(DisplayImageOptions.createSimple())
+                .defaultDisplayImageOptions(options)
                 .tasksProcessingOrder(QueueProcessingType.LIFO)
                 .build();
 

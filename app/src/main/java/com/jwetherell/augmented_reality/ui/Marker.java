@@ -60,6 +60,11 @@ public class Marker implements Comparable<Marker> {
 
     // Unique identifier of Marker
     private String name = null;
+
+    public PhysicalLocation getPhysicalLocation() {
+        return physicalLocation;
+    }
+
     // Marker's physical location (Lat, Lon, Alt)
     private final PhysicalLocation physicalLocation = new PhysicalLocation();
     // Distance from camera to PhysicalLocation in meters

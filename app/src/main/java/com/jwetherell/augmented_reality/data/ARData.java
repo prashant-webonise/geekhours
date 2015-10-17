@@ -352,4 +352,9 @@ public abstract class ARData {
             return ARData.orientationAngle;
         }
     }
+
+    public static void clearAll() {
+        cache.clear();
+        markerList.clear();
+    }
 }
