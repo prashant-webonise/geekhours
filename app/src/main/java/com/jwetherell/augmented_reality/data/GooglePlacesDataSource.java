@@ -16,6 +16,7 @@ import android.graphics.Color;
 import com.jwetherell.augmented_reality.R;
 import com.jwetherell.augmented_reality.ui.IconMarker;
 import com.jwetherell.augmented_reality.ui.Marker;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
  * This class extends DataSource to fetch data from Google Places.
@@ -25,7 +26,8 @@ import com.jwetherell.augmented_reality.ui.Marker;
 public class GooglePlacesDataSource extends NetworkDataSource {
 
 	private static final String URL = "https://maps.googleapis.com/maps/api/place/search/json?";
-	private static final String TYPES = "airport|amusement_park|aquarium|art_gallery|bus_station|campground|car_rental|city_hall|embassy|establishment|hindu_temple|local_governemnt_office|mosque|museum|night_club|park|place_of_worship|police|post_office|stadium|spa|subway_station|synagogue|taxi_stand|train_station|travel_agency|University|zoo";
+//	private static final String TYPES = "airport|amusement_park|aquarium|art_gallery|bus_station|campground|car_rental|city_hall|embassy|establishment|hindu_temple|local_governemnt_office|mosque|museum|night_club|park|place_of_worship|police|post_office|stadium|spa|subway_station|synagogue|taxi_stand|train_station|travel_agency|University|zoo";
+	private static final String TYPES = "airport|hindu_temple|train_station";
 
 	private static String key = null;
 	private static Bitmap icon = null;
@@ -122,6 +124,7 @@ public class GooglePlacesDataSource extends NetworkDataSource {
 			if (lat != null) {
 				String user = jo.getString("name");
 
+				icon = ImageLoader.getInstance().loadImageSync(jo.getString("icon"));
 				ma = new IconMarker(user + ": " + jo.getString("name"), lat, lon, 0, Color.RED, icon);
 			}
 		} catch (Exception e) {
