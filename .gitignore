@@ -1,0 +1,16 @@
+/wheel-library/local.properties
+/wheel-library/gradlew.bat
+/wheel-library/gradlew
+/wheel-library/gradle
+/wheel-library/.idea
+.gradle
+/local.properties
+/.idea/
+.DS_Store
+/build
+/captures
+*.iml
+/gradlew.bat
+/gradlew
+/app/build
+/gradle
