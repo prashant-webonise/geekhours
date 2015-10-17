@@ -22,14 +22,14 @@ import com.jwetherell.augmented_reality.ui.objects.PaintableText;
  */
 public class Radar {
 
-    public static final float RADIUS = 48;
+    public static final float RADIUS = 100;
 
     private static final int LINE_COLOR = Color.argb(150, 0, 0, 220);
     private static final float PAD_X = 10;
     private static final float PAD_Y = 10;
-    private static final int RADAR_COLOR = Color.argb(100, 0, 0, 200);
-    private static final int TEXT_COLOR = Color.rgb(255, 255, 255);
-    private static final int TEXT_SIZE = 12;
+    private static final int RADAR_COLOR = Color.GREEN;
+    private static final int TEXT_COLOR = Color.RED;
+    private static final int TEXT_SIZE = 24;
 
     private static final StringBuilder DIR_TXT = new StringBuilder();
     private static final StringBuilder RADAR_TXT = new StringBuilder();
