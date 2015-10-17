@@ -55,7 +55,7 @@ public class AugmentedReality extends SensorsActivity implements OnTouchListener
 
     public static boolean ui_portrait = false;  // Defaulted to LANDSCAPE use  
     public static boolean showRadar = true;
-    public static boolean showZoomBar = true;
+    public static boolean showZoomBar = false;
     public static boolean useRadarAutoOrientate = true;
     public static boolean useMarkerAutoRotate = true;
     public static boolean useDataSmoothing = true;

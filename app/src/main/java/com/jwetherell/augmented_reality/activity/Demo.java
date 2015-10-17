@@ -34,6 +34,7 @@ import com.jwetherell.augmented_reality.R;
 import com.jwetherell.augmented_reality.data.ARData;
 import com.jwetherell.augmented_reality.data.CustomPlacesDataSource;
 import com.jwetherell.augmented_reality.data.GooglePlacesDataSource;
+import com.jwetherell.augmented_reality.data.LocalDataSource;
 import com.jwetherell.augmented_reality.data.NetworkDataSource;
 import com.jwetherell.augmented_reality.ui.Marker;
 import com.jwetherell.augmented_reality.widget.VerticalTextView;
@@ -77,13 +78,13 @@ public class Demo extends AugmentedReality {
         myToast.setDuration(Toast.LENGTH_SHORT);
 
         // Local
-//        LocalDataSource localData = new LocalDataSource(this.getResources());
+        LocalDataSource localData = new LocalDataSource(this);
 //        ARData.addMarkers(localData.getMarkers());
 
 //        NetworkDataSource wikipedia = new WikipediaDataSource(this.getResources());
 //        sources.put("wiki", wikipedia);
-        NetworkDataSource googlePlaces = new CustomPlacesDataSource(this.getResources());
-        sources.put("googlePlaces", googlePlaces);
+//        NetworkDataSource googlePlaces = new CustomPlacesDataSource(this.getResources());
+//        sources.put("googlePlaces", googlePlaces);
 
 
         prepareUI();
@@ -92,28 +93,28 @@ public class Demo extends AugmentedReality {
 
     private void prepareUI() {
         View view = LayoutInflater.from(this).inflate(R.layout.filter_spinner, null);
-        addContentView(view, new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+        addContentView(view, new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
-        Spinner spinnerFilters = (Spinner) view.findViewById(R.id.spinnerFilters);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, GooglePlacesDataSource.filters);
-        spinnerFilters.setAdapter(adapter);
+//        Spinner spinnerFilters = null;// = (Spinner) view.findViewById(R.id.spinnerFilters);
+//        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, GooglePlacesDataSource.filters);
+//        spinnerFilters.setAdapter(adapter);
 
-        spinnerFilters.setOnItemSelectedListener((new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                CustomPlacesDataSource googlePlaces = new CustomPlacesDataSource(Demo.this.getResources(), ((TextView) view).getText().toString());
-                reFresh();
-
-                sources.put("googlePlaces", googlePlaces);
-                Location last = ARData.getCurrentLocation();
-                updateData(last.getLatitude(), last.getLongitude(), last.getAltitude());
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        }));
+//        spinnerFilters.setOnItemSelectedListener((new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                CustomPlacesDataSource googlePlaces = new CustomPlacesDataSource(Demo.this.getResources(), ((TextView) view).getText().toString());
+//                reFresh();
+//
+//                sources.put("googlePlaces", googlePlaces);
+//                Location last = ARData.getCurrentLocation();
+//                updateData(last.getLatitude(), last.getLongitude(), last.getAltitude());
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        }));
 
     }
 
@@ -176,9 +177,9 @@ public class Demo extends AugmentedReality {
      */
     @Override
     protected void markerTouched(Marker marker) {
-        String uri = String.format(Locale.ENGLISH, "geo:%f,%f", marker.getPhysicalLocation().getLatitude(), marker.getPhysicalLocation().getLongitude());
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-        startActivity(intent);
+//        String uri = String.format(Locale.ENGLISH, "geo:%f,%f", marker.getPhysicalLocation().getLatitude(), marker.getPhysicalLocation().getLongitude());
+//        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+//        startActivity(intent);
     }
 
     /**
